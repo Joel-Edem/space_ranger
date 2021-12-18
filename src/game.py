@@ -2,7 +2,7 @@ import sys
 import pygame
 
 from src.componnets.background_stars import BackgroundStars
-from src.handle_event import handle_events
+from src.componnets.ship import Ship
 from src.render import render
 from src.settings import Settings
 import logging
@@ -31,6 +31,9 @@ class Game:
 
         self.create_background()
 
+        # se
+        self.ship = None
+
     def create_background(self):
         self.background.create_stars()
 
@@ -41,10 +44,15 @@ class Game:
         """
         logger.debug("starting game")
         self.is_running = True
+        self.ship = Ship()
         try:
-
             while self.is_running:
-                handle_events(self)  # handle events
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        self.stop()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key in [pygame.K_q, pygame.K_ESCAPE]:
+                            self.stop()
                 update(self)  # update state
                 render(self)  # render updates
                 self.clock.tick()
@@ -62,5 +70,3 @@ class Game:
         pygame.quit()
         logger.info("stopped")
         sys.exit(0)
-
-

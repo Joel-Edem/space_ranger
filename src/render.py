@@ -9,4 +9,8 @@ def render(self) -> None:
     self.screen.fill((0, 0, 0))
     self.background.render_stars(self.screen)
     self.fps_counter.render(self.screen)
+
+    if self.ship:
+        self.ship.render(self.screen)
+
     pygame.display.flip()

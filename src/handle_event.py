@@ -1,6 +1,6 @@
 import pygame
 
-from src.settings import StarDirection
+from src.settings import PlayerDirection
 
 
 def handle_events(self):
@@ -8,9 +8,9 @@ def handle_events(self):
         if event.type == pygame.QUIT:
             self.stop()
         elif event.type == pygame.KEYDOWN:
-            handle_key_down(self, event)
+            pass
         elif event.type == pygame.KEYUP:
-            handle_key_up(self, event)
+            pass
 
 
 def handle_key_up(self, e):
@@ -26,9 +26,9 @@ def handle_key_up(self, e):
 
 def handle_key_down(self, e):
     if e.key == pygame.K_RIGHT:
-        self.background.star_direction = StarDirection.right
+        self.background.star_direction = PlayerDirection.right
     elif e.key == pygame.K_LEFT:
-        self.background.star_direction = StarDirection.left
+        self.background.star_direction = PlayerDirection.left
     elif e.key == pygame.K_SPACE:
         pass
     if e.key == pygame.K_q:

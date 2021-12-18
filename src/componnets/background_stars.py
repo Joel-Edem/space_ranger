@@ -1,14 +1,15 @@
 import random
+from typing import Optional
 
 import pygame
 from pygame.sprite import Sprite, Group
 
-from src.settings import BackgroundStarSettings as BG_Settings, Settings, StarDirection
+from src.settings import BackgroundStarSettings as BG_Settings, Settings, PlayerDirection
 
 
 class BackgroundStars(Sprite):
     stars = Group()
-    star_direction: StarDirection = None
+    star_direction: Optional[PlayerDirection] = None
 
     @staticmethod
     def get_star_size() -> (int, int):
@@ -57,6 +58,20 @@ class BackgroundStars(Sprite):
     def render(self, screen):
         pygame.draw.rect(screen, self.color, self.rect)
 
+    @classmethod
+    def get_star_direction(cls):
+        """
+        set direction on every update call
+        :return:
+        """
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RIGHT]:
+            cls.star_direction = PlayerDirection.left
+        elif keys[pygame.K_LEFT]:
+            cls.star_direction = PlayerDirection.right
+        else:
+            cls.star_direction = PlayerDirection.up
+
     def update(self):
         """
         Update stars position based on generated settings
@@ -65,21 +80,32 @@ class BackgroundStars(Sprite):
         x_out_of_bounds = Settings.screen_width < self.x or self.x < 0
         y_out_of_bounds = Settings.screen_height < self.y or self.y < 0
 
-        if x_out_of_bounds or y_out_of_bounds:
-            self.x = 0 if self.star_direction == StarDirection.left else \
-                Settings.screen_width if self.star_direction == StarDirection.right else \
-                    self.get_starting_location_x()
+        if x_out_of_bounds:
+            self.x = Settings.screen_width if self.star_direction == PlayerDirection.left else \
+                0 if self.star_direction == PlayerDirection.right else self.get_starting_location_x()
             self.y = self.get_starting_location_y()
+        if y_out_of_bounds:
+            self.x = self.get_starting_location_y()
+            self.y = Settings.screen_height if self.star_direction == PlayerDirection.down else \
+                0 if self.star_direction == PlayerDirection.up else self.get_starting_location_x()
         else:
             self.x += self.speed
             self.y += self.speed
-        if self.star_direction == StarDirection.right:
-            self.x -= 2
-        elif self.star_direction == StarDirection.left:
+
+        if self.star_direction == PlayerDirection.right:
             self.x += 2
+        elif self.star_direction == PlayerDirection.left:
+            self.x -= 2
+        elif self.star_direction == PlayerDirection.up:
+            self.y += 2
 
         self.rect.x = self.x
         self.rect.y = self.y
+
+    @classmethod
+    def update_stars(cls):
+        cls.get_star_direction()
+        cls.stars.update()
 
     @classmethod
     def create_stars(cls):
