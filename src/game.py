@@ -1,8 +1,10 @@
 import sys
 import pygame
+from pygame.sprite import Group
 
 from src.componnets.background_stars import BackgroundStars
 from src.componnets.ship import Ship
+from src.handle_event import handle_events
 from src.render import render
 from src.settings import Settings
 import logging
@@ -33,6 +35,7 @@ class Game:
 
         # se
         self.ship = None
+        self.bullets = None
 
     def create_background(self):
         self.background.create_stars()
@@ -45,14 +48,11 @@ class Game:
         logger.debug("starting game")
         self.is_running = True
         self.ship = Ship()
+        self.bullets = Group()
         try:
             while self.is_running:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        self.stop()
-                    elif event.type == pygame.KEYDOWN:
-                        if event.key in [pygame.K_q, pygame.K_ESCAPE]:
-                            self.stop()
+
+                handle_events(self)
                 update(self)  # update state
                 render(self)  # render updates
                 self.clock.tick()

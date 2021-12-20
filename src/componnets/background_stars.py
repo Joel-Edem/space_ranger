@@ -93,9 +93,9 @@ class BackgroundStars(Sprite):
             self.y += self.speed
 
         if self.star_direction == PlayerDirection.right:
-            self.x += 2
+            self.x += 3
         elif self.star_direction == PlayerDirection.left:
-            self.x -= 2
+            self.x -= 3
         elif self.star_direction == PlayerDirection.up:
             self.y += 2
 

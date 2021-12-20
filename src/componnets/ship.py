@@ -82,7 +82,7 @@ class Ship(Sprite):
             self.reset_animation()
         else:
             self.move_ship()
-            self.current_frame += self.ANIMATION_RATE if not self.is_animating else self.IDLE_RATE
+            self.current_frame += self.ANIMATION_RATE if self.is_animating else self.IDLE_RATE
             if self.current_frame >= len(self.actions[self.direction]):  # return to first image
                 self.current_frame = 0 if not self.is_animating else self.current_frame - self.ANIMATION_RATE
 
