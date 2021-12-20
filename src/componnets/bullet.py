@@ -21,7 +21,6 @@ class Bullet(Sprite):
                 cls.images[b_type].append(
                     pygame.image.load(fn).convert_alpha()
                 )
-            print('loaded images')
 
     def __init__(self, group: Group, bullet_type: str, ship_x: float, ship_height: float, ):
         super().__init__(group)
@@ -40,7 +39,6 @@ class Bullet(Sprite):
         if self.rect.bottom <= 0:
             self.kill()
             self.is_animating = False
-            print("removed bullet")
             return False
         return True
 

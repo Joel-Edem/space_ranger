@@ -2,6 +2,7 @@ import sys
 import pygame
 from pygame.sprite import Group
 
+from src.componnets.aliens import Alien
 from src.componnets.background_stars import BackgroundStars
 from src.componnets.ship import Ship
 from src.handle_event import handle_events
@@ -36,6 +37,7 @@ class Game:
         # se
         self.ship = None
         self.bullets = None
+        self.aliens = None
 
     def create_background(self):
         self.background.create_stars()
@@ -49,19 +51,21 @@ class Game:
         self.is_running = True
         self.ship = Ship()
         self.bullets = Group()
-        try:
-            while self.is_running:
+        self.aliens = Group()
+        Alien.create_fleet(self.aliens, self.ship.rect.height,)
+        # try:
+        while self.is_running:
 
-                handle_events(self)
-                update(self)  # update state
-                render(self)  # render updates
-                self.clock.tick()
+            handle_events(self)
+            update(self)  # update state
+            render(self)  # render updates
+            self.clock.tick()
 
-        except Exception as e:
-            print(f"error ==>{e}")
-            pass
-        finally:
-            self.stop()
+        # except Exception as e:
+        #     print(f"error ==>{e}")
+        #     raise e
+        # finally:
+        #     self.stop()
 
     def stop(self, ):
         logger.info('closing ---------------------------')

@@ -13,7 +13,7 @@ class Ship(Sprite):
     }
     images = []
     sprite_sheet = SpriteSheet("images/space_ranger_sprite_sheet.png")
-    ANIMATION_RATE = .25
+    ANIMATION_RATE = .4
     IDLE_RATE = .2
 
     @classmethod

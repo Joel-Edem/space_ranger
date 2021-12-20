@@ -5,6 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 ASSETS = os.path.join(BASE_DIR, "assets")
 
+
 class Settings:
     screen_width = 800
     screen_height = 700
@@ -17,8 +18,9 @@ class Settings:
         pass
         raise Exception("Do not instantiate")
 
+
 class ShipSettings:
-    speed_factor =2
+    speed_factor = 2
 
 
 class BackgroundStarSettings:
@@ -32,8 +34,13 @@ class BackgroundStarSettings:
 
 
 class PlayerDirection(enum.Enum):
-
     left = enum.auto()
     right = enum.auto()
     up = enum.auto()
     down = enum.auto()
+
+
+class AlienSettings:
+    speed = 1
+    drop_rate = 5
+    direction = 1  # 1 for right -1 for left
