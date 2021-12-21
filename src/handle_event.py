@@ -10,11 +10,14 @@ def handle_events(game):
         elif event.type == pygame.KEYDOWN:
             if event.key in [pygame.K_q, pygame.K_ESCAPE]:
                 game.stop()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+            elif event.key == pygame.K_SPACE:
+                if game.game_state.game_running:
                     fire_bullet(game)
         elif event.type == pygame.KEYUP:
             pass
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if not game.game_state.game_running:
+                game.game_state.current_screen.handle_click()
 
 
 def fire_bullet(game):

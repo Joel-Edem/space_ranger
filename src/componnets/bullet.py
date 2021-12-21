@@ -16,7 +16,7 @@ class Bullet(Sprite):
     def load_images(cls, b_type):
         if not cls.images[b_type]:
             cls.images[b_type] = []
-            for i in range(4):
+            for i in range(3, -1, -1):
                 fn = os.path.join(ASSETS, 'images', b_type, f"{i}.png")
                 cls.images[b_type].append(
                     pygame.image.load(fn).convert_alpha()
@@ -32,7 +32,7 @@ class Bullet(Sprite):
         self.rect.top = ship_height
         self.rect.centerx = ship_x
         self.speed_factor = 2
-        self.is_animating = True
+        self.is_animating = False
         self.bullet_type = bullet_type
 
     def check_bounds(self):
@@ -46,10 +46,19 @@ class Bullet(Sprite):
         if self.check_bounds():
             self.rect.y = float(self.rect.y) - self.speed_factor
             if self.is_animating:
-                self.current_idx += .25
+                self.current_idx += .35
                 if self.current_idx >= len(self.images[self.bullet_type]) - 1:
                     self.is_animating = False
+                    self.kill()
                 self.image = self.images[self.bullet_type][int(self.current_idx)]
+
+    def destroy(self):
+        """
+        Animate bullet destruction
+        :return:
+        """
+        self.is_animating = True
+
 
     def render(self, screen):
         screen.blit(self.image, self.rect)

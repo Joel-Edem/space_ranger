@@ -1,10 +1,13 @@
 import sys
+from typing import Optional
+
 import pygame
 from pygame.sprite import Group
 
 from src.componnets.aliens import Alien
 from src.componnets.background_stars import BackgroundStars
 from src.componnets.ship import Ship
+from src.game_status import GameStatus
 from src.handle_event import handle_events
 from src.render import render
 from src.settings import Settings
@@ -30,47 +33,36 @@ class Game:
         self.clock = pygame.time.Clock()
         self.fps_counter = FpsCounter(self.clock)
         self.background = BackgroundStars
-        self.is_running = False
-
         self.create_background()
-
-        # se
-        self.ship = None
-        self.bullets = None
-        self.aliens = None
+        self.ship: Optional[Ship] = None
+        self.bullets: Group = Group()
+        self.aliens: Group = Group()
+        self.game_state = GameStatus(self)
 
     def create_background(self):
         self.background.create_stars()
 
-    def start(self):
+    def run(self):
         """
-        Start game
+        Start game loop
         :return:
         """
-        logger.debug("starting game")
-        self.is_running = True
-        self.ship = Ship()
-        self.bullets = Group()
-        self.aliens = Group()
-        Alien.create_fleet(self.aliens, self.ship.rect.height,)
+        logger.debug("starting game loop")
         # try:
-        while self.is_running:
-
+        while True:
             handle_events(self)
             update(self)  # update state
             render(self)  # render updates
             self.clock.tick()
-
-        # except Exception as e:
+        # except KeyboardInterrupt as e:
         #     print(f"error ==>{e}")
-        #     raise e
         # finally:
         #     self.stop()
 
     def stop(self, ):
         logger.info('closing ---------------------------')
 
-        self.is_running = False
+        self.game_state.reset_game()
         pygame.quit()
         logger.info("stopped")
         sys.exit(0)

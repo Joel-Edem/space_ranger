@@ -12,10 +12,10 @@ class Settings:
 
     bg_color = (0, 0, 0)
     color_light = (255, 255, 255)
+    show_fps = False
 
     def __init__(self):
         """Settings for space rangers game"""
-        pass
         raise Exception("Do not instantiate")
 
 
@@ -44,3 +44,8 @@ class AlienSettings:
     speed = 1
     drop_rate = 5
     direction = 1  # 1 for right -1 for left
+
+
+class GameSettings:
+    max_lives = 3
+    max_bullets = 5

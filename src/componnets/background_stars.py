@@ -114,6 +114,7 @@ class BackgroundStars(Sprite):
 
     @classmethod
     def render_stars(cls, screen):
+        screen.fill((0, 0, 0))
         star: BackgroundStars
         for star in cls.stars:
             star.render(screen)

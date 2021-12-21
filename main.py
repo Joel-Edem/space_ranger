@@ -5,7 +5,7 @@ from src.game import Game
 def start_game():
     """ create and start game instance """
     game = Game()
-    game.start()
+    game.run()
 
 
 if __name__ == '__main__':
