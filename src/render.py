@@ -17,4 +17,5 @@ def render(self) -> None:
 
         self.ship.render(self.screen)
     self.game_state.render(self.screen)
+    self.score_board.render(self.screen)
     pygame.display.flip()

@@ -26,7 +26,7 @@ class HomeScreen:
             "high_scores": {
                 "msg": "High Scores",
                 "height": 50,
-                "cb":None
+                "cb": None
             },
 
             "settings": {

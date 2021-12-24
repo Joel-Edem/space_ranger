@@ -20,7 +20,7 @@ class Settings:
 
 
 class ShipSettings:
-    speed_factor = 2
+    speed_factor = 3
 
 
 class BackgroundStarSettings:
@@ -41,8 +41,8 @@ class PlayerDirection(enum.Enum):
 
 
 class AlienSettings:
-    speed = 1
-    drop_rate = 5
+    speed = 2
+    drop_rate = 10
     direction = 1  # 1 for right -1 for left
 
 

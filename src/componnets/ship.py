@@ -17,6 +17,7 @@ class Ship(Sprite):
     flame_sprite_sheet = SpriteSheet("images/flame_sprite_sheet.png")
     ANIMATION_RATE = .4
     IDLE_RATE = .2
+    _initialized = False
 
     @classmethod
     def initialize(cls):
@@ -26,26 +27,27 @@ class Ship(Sprite):
         if not cls.sprite_sheet.loaded:
             cls.sprite_sheet.load()
             cls.flame_sprite_sheet.load()
+        if not cls._initialized:
+            for idx, frame in flame_frames['flame']["frames"].items():
+                location = Location(
+                    x=frame["x"],
+                    y=frame["y"],
+                    width=flame_frames["frame_width"],
+                    height=flame_frames["frame_height"]
+                )
+                img = cls.flame_sprite_sheet.get_image(at=location)
+                cls.flames.append(img)
 
-        for idx, frame in flame_frames['flame']["frames"].items():
-            location = Location(
-                x=frame["x"],
-                y=frame["y"],
-                width=flame_frames["frame_width"],
-                height=flame_frames["frame_height"]
-            )
-            img = cls.flame_sprite_sheet.get_image(at=location)
-            cls.flames.append(img)
-
-        for idx, frame in ship_frames['ship']["frames"].items():
-            location = Location(
-                x=frame["x"],
-                y=frame["y"],
-                width=ship_frames["frame_width"],
-                height=ship_frames["frame_height"]
-            )
-            img = cls.sprite_sheet.get_image(at=location)
-            cls.images.append(img)
+            for idx, frame in ship_frames['ship']["frames"].items():
+                location = Location(
+                    x=frame["x"],
+                    y=frame["y"],
+                    width=ship_frames["frame_width"],
+                    height=ship_frames["frame_height"]
+                )
+                img = cls.sprite_sheet.get_image(at=location)
+                cls.images.append(img)
+            cls._initialized = True
 
     def __init__(self):
         super().__init__()

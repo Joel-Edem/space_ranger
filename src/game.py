@@ -4,8 +4,8 @@ from typing import Optional
 import pygame
 from pygame.sprite import Group
 
-from src.componnets.aliens import Alien
 from src.componnets.background_stars import BackgroundStars
+from src.componnets.scores import ScoreBoard
 from src.componnets.ship import Ship
 from src.game_status import GameStatus
 from src.handle_event import handle_events
@@ -38,6 +38,7 @@ class Game:
         self.bullets: Group = Group()
         self.aliens: Group = Group()
         self.game_state = GameStatus(self)
+        self.score_board = ScoreBoard(self.game_state)
 
     def create_background(self):
         self.background.create_stars()
