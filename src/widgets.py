@@ -67,12 +67,11 @@ class Button:
         self.msg_image_rect.center = self.rect.center
 
     def set_active(self, active):
-        # if active != self.is_active:
-        self.is_active = active
-        self.prep_message(self.message)
+        if active != self.is_active:
+            self.is_active = active
+            self.prep_message(self.message)
 
     def handle_click(self):
-        print("clicked")
         if self.call_back:
             self.call_back()
 

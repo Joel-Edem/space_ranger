@@ -57,11 +57,29 @@ class HomeScreen:
                                           Settings.screen_width / 2, y,
                                           is_active=self.current_selection == w_name,
                                           cb=self.buttons[w_name]['cb'])
-        Button.selected = self.current_selection
 
     def render(self, screen):
         for btn in self.widgets.values():
             btn.render(screen)
+
+    def switch_active_button(self, up:bool):
+
+        keys = list(self.buttons.keys())
+        cur_idx = keys.index(self.current_selection)
+        next_idx = (cur_idx - 1) if up else (cur_idx + 1) % len(keys)
+        self.last_active = keys[next_idx]
+        self.widgets[keys[cur_idx]].set_active(False)
+        self.widgets[keys[next_idx]].set_active(True)
+        self.current_selection = keys[next_idx]
+
+    def handle_button_press(self, event):
+        if event.key == pygame.K_DOWN:
+            self.switch_active_button(False)
+        elif event.key == pygame.K_UP:
+            self.switch_active_button(True)
+        elif event.key == pygame.K_RETURN:
+            self.widgets[self.current_selection].handle_click()
+
 
     def handle_click(self):
         if pygame.mouse.get_pressed()[0]:

@@ -1,7 +1,5 @@
 import json
 import os
-import pickle
-
 import pygame
 from assets.images.ship_frames import ship_frames
 from src.componnets.ship import Ship
@@ -146,7 +144,8 @@ class ScoreBoard:
         if len(self.high_scores) > 10:  # onlu store 10 high scores
             self.high_scores.pop()
         # save high scores
-        self.save_high_scores()
+        if self.score > 0:
+            self.save_high_scores()
 
     def new_game(self):
         """
@@ -169,13 +168,10 @@ class ScoreBoard:
         """
         fp = os.path.join(BASE_DIR, 'data', 'scores.json')
         try:
-            print("todo: loading high scores ")
             with open(fp, 'r') as file:
                 self.high_scores = json.load(file)
-                print(self.high_scores)
         except FileNotFoundError as e:
             print(f"Could not find file {e.filename}")
-
 
     def save_high_scores(self):
         """
@@ -183,7 +179,6 @@ class ScoreBoard:
         :return:
         """
         fp = os.path.join(BASE_DIR, 'data', 'scores.json')
+        self.high_scores.sort(reverse=True)
         with open(fp, 'w') as file:
             json.dump(self.high_scores, file)
-            # file.write(json.dumps(self.high_scores))
-

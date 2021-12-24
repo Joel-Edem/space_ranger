@@ -21,7 +21,7 @@ class Transition:
     def render(self, *args, **kwargs) -> None:
         raise NotImplementedError
 
-    def handle_event(self):
+    def handle_event(self, event=None):
         pass
 
 
@@ -35,8 +35,23 @@ class PauseGame(Transition):
     # noinspection DuplicatedCode
     def update(self):
         x, y = pygame.mouse.get_pos()
-        for btn in [self.resume_btn, self.quit_btn]:
-            btn.set_active(not not btn.rect.collidepoint(x, y))
+        hits = False
+        for idx, btn in enumerate([self.resume_btn, self.quit_btn]):
+            if btn.rect.collidepoint(x, y):
+                hits = True
+                btn.set_active(True)
+                self.curr_selection = "resume" if idx == 0 else "quit"
+
+            else:
+                btn.set_active(False)
+        if not hits:
+
+            if self.curr_selection == 'resume':
+                self.resume_btn.set_active(True)
+                self.quit_btn.set_active(False)
+            else:
+                self.resume_btn.set_active(False)
+                self.quit_btn.set_active(True)
 
     def handle_resume(self):
         """
@@ -52,9 +67,30 @@ class PauseGame(Transition):
         """
         self.callback()
 
-    def handle_event(self):
-        self.resume_btn.handle_event()
-        self.quit_btn.handle_event()
+    def switch_active_button(self):
+        print('called')
+        if self.curr_selection == "resume":
+            self.curr_selection = "quit"
+            self.resume_btn.set_active(False)
+            self.quit_btn.set_active(True)
+        else:
+            self.curr_selection = "resume"
+            self.resume_btn.set_active(True)
+            self.quit_btn.set_active(False)
+
+    def handle_event(self, event=None):
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.resume_btn.handle_event()
+            self.quit_btn.handle_event()
+        elif event.type == pygame.KEYDOWN:
+            if event.key in [pygame.K_DOWN, pygame.K_UP]:
+                self.switch_active_button()
+            elif event.key == pygame.K_RETURN:
+                if self.curr_selection == 'resume':
+                    self.resume_btn.handle_click()
+                elif self.curr_selection == 'quit':
+                    self.quit_btn.handle_click()
 
     def __init__(self, callback=None):
         super().__init__(callback)
@@ -67,9 +103,11 @@ class PauseGame(Transition):
         self.font_rect.centerx = Settings.screen_width / 2
         self.font_rect.centery = Settings.screen_height / 2
         self.resume_btn = Button("Resume", self.font_rect.centerx, self.font_rect.bottom + 10,
-                                 cb=self.handle_resume)
+                                 cb=self.handle_resume,
+                                 button_color=(0, 150, 0), active_color=(0, 240, 0))
         self.quit_btn = Button("Quit", self.font_rect.centerx, self.resume_btn.rect.bottom + 10,
-                               button_color=(255, 0, 0), active_color=(200, 0, 0), cb=self.handle_quit)
+                               button_color=(150, 0, 0), active_color=(245, 0, 0), cb=self.handle_quit)
+        self.curr_selection = "resume"
 
 
 class GenericTransition(Transition):

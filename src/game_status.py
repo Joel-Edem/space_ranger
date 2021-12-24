@@ -31,7 +31,8 @@ class GameStatus:
     #     self.game_running = True
 
     def create_new_game(self):
-        self.reset_game()
+        self.game.aliens.empty()
+        self.game.bullets.empty()
         self.game.ship = Ship()
         Alien.create_fleet(self.game.aliens, self.game.ship.rect.height, level=self.current_level)
         self.remaining_lives = GameSettings.max_lives
@@ -50,7 +51,7 @@ class GameStatus:
         self.game.bullets.empty()
         self.game.ship = None
         self.game.ship = Ship()
-        Alien.create_fleet(self.game.aliens, self.game.ship.rect.height, )
+        Alien.create_fleet(self.game.aliens, self.game.ship.rect.height, level=self.current_level)
 
     def game_over(self):
         """
@@ -65,6 +66,7 @@ class GameStatus:
         self.transition = GenericTransition(
             message="Game Over",
             callback=_game_end_cb)
+        self.current_screen = HomeScreen(self)
 
     def increase_level(self):
         self.current_level += 1
@@ -113,15 +115,16 @@ class GameStatus:
                 if event.key in [pygame.K_ESCAPE]:
                     if not self.transition:
                         self.pause_game()
-                    else:
-                        self.transition = None  # unpause
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if self.transition:
-                    self.transition.handle_event()
+                    elif isinstance(self.transition, PauseGame):
+                        self.transition = None
+            if self.transition:
+                self.transition.handle_event(event)
 
         else:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.current_screen.handle_click()
+            elif event.type == pygame.KEYDOWN:
+                self.current_screen.handle_button_press(event)
 
     def update(self):
         """
@@ -150,10 +153,10 @@ class GameStatus:
         self.game.ship = None
         self.remaining_lives = 0
         self.current_level = 1
+        self.current_screen = HomeScreen(self)
         self.game_running = False
 
-# todo if in game, handle escape,
-# todo handle arrow keys if not in game
+
 # todo sound
 # todo high score screen
 # todo laser cool down
