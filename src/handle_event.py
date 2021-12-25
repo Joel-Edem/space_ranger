@@ -22,3 +22,4 @@ def fire_bullet(game):
     # todo check if game has started
     # create bullet and add to bullet group
     Bullet(game.bullets, 'laser', game.ship.rect.centerx, game.ship.rect.top)
+    game.sound_effects['laser'].play()

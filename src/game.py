@@ -1,3 +1,4 @@
+import os.path
 import sys
 from typing import Optional
 
@@ -10,7 +11,7 @@ from src.componnets.ship import Ship
 from src.game_status import GameStatus
 from src.handle_event import handle_events
 from src.render import render
-from src.settings import Settings
+from src.settings import Settings, ASSETS
 import logging
 
 from src.update import update
@@ -39,6 +40,14 @@ class Game:
         self.aliens: Group = Group()
         self.game_state = GameStatus(self)
         self.score_board = ScoreBoard(self.game_state)
+        self.sound_effects = {}
+        self.load_sounds()
+
+    def load_sounds(self):
+
+        for n in ["laser", "explosion"]:
+            fp = os.path.join(ASSETS, 'sound', f'{n}.wav')
+            self.sound_effects[n] = pygame.mixer.Sound(fp)
 
     def create_background(self):
         self.background.create_stars()
@@ -55,10 +64,6 @@ class Game:
             update(self)  # update state
             render(self)  # render updates
             self.clock.tick()
-        # except KeyboardInterrupt as e:
-        #     print(f"error ==>{e}")
-        # finally:
-        #     self.stop()
 
     def stop(self, ):
         logger.info('closing ---------------------------')

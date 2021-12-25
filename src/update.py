@@ -14,6 +14,7 @@ def update(self) -> None:
         self.bullets.update()
         Alien.update_fleet(self.aliens, self.bullets,
                            self.game_state.lost_life, self.game_state.level_complete,
-                           self.score_board.update_score)
+                           self.score_board.update_score,
+                           self.sound_effects["explosion"])
     self.game_state.update()
     self.score_board.update()

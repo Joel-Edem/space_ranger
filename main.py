@@ -1,4 +1,4 @@
-
+#! python 
 from src.game import Game
 
 

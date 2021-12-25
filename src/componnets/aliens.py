@@ -1,6 +1,5 @@
 import dataclasses
 import os
-import time
 from typing import Callable
 
 import pygame.image
@@ -93,9 +92,9 @@ class Alien(Sprite):
         trigger animation when hit by bullet or ship
         :return:
         """
-        # if not self.is_dying:
-        self.is_dying = True
-        self.shrink = 100
+        if not self.is_dying:
+            self.is_dying = True
+            self.shrink = 100
 
     @classmethod
     def check_fleet_edges(cls, aliens: Group):
@@ -133,7 +132,7 @@ class Alien(Sprite):
                 self.kill()
 
     @classmethod
-    def check_bullet_ship_collisions(cls, bullets, aliens, update_score: Callable[[int], None] = None):
+    def check_bullet_ship_collisions(cls, bullets, aliens, update_score: Callable[[int], None] = None, sound=None):
         """
         check if bullets collided with aliens and  remove
         :return:
@@ -147,6 +146,7 @@ class Alien(Sprite):
                 for alien in aliens_hit:
                     if not alien.is_dying:
                         alien.handle_bullet_hit()
+                        sound.play()
                         update_score(1)
                 bullet.destroy()
         # if collisions:
@@ -175,10 +175,10 @@ class Alien(Sprite):
 
     @classmethod
     def update_fleet(cls, aliens: Group, bullets: Group,
-                     life_lost=None, level_complete=None, update_score: Callable[[int], None] = None):
+                     life_lost=None, level_complete=None, update_score: Callable[[int], None] = None, sound=None):
         cls.check_fleet_edges(aliens)
         cls.check_bottom(aliens, life_lost)
-        cls.check_bullet_ship_collisions(bullets, aliens, update_score)
+        cls.check_bullet_ship_collisions(bullets, aliens, update_score, sound)
         aliens.update()
         cls.check_level_complete(aliens, level_complete)
 
