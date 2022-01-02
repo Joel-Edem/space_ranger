@@ -14,6 +14,8 @@ class Settings:
     color_light = (255, 255, 255)
     show_fps = False
 
+    sound_level = 15
+
     def __init__(self):
         """Settings for space rangers game"""
         raise Exception("Do not instantiate")

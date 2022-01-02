@@ -5,6 +5,7 @@ from assets.images.ship_frames import ship_frames
 from src.componnets.ship import Ship
 from src.load_assets import Location
 from src.settings import Settings, BASE_DIR
+from src.ui.home_screen import HomeScreen
 
 
 class ScoreBoard:
@@ -36,7 +37,7 @@ class ScoreBoard:
     def update_score_image(self):
         if self.score != self.last_score:
             self.score_image = self.font.render(
-                f"{self.score}", True, self.font_color)
+                f"{int(self.score):,}", True, self.font_color)
             self.score_rect = self.score_image.get_rect()
             self.score_rect.right = Settings.screen_width - 20
             self.score_rect.top = 10
@@ -48,7 +49,7 @@ class ScoreBoard:
         """
         if self.cur_high_score != self.last_high_score:
             self.high_score_image = self.font.render(
-                f"High Score: {self.cur_high_score}", True, self.font_color)
+                f"High Score: {int(self.cur_high_score):,}", True, self.font_color)
             self.high_score_rect = self.high_score_image.get_rect()
             self.high_score_rect.centerx = Settings.screen_width / 2
             self.high_score_rect.top = 10
@@ -56,12 +57,14 @@ class ScoreBoard:
             self.high_score_image.convert_alpha()
 
     def update(self):
-        self.update_high_score_image()
+        if isinstance(self.game_state.current_screen, HomeScreen):
+            self.update_high_score_image()
         if self.game_state.game_running:
             self.update_score_image()
 
     def render(self, screen):
-        screen.blit(self.high_score_image, self.high_score_rect)
+        if isinstance(self.game_state.current_screen, HomeScreen):
+            screen.blit(self.high_score_image, self.high_score_rect)
         if self.game_state.game_running:
             screen.blit(self.score_image, self.score_rect)
             screen.blit(self.ships_left_image, self.ships_left_rect)
@@ -141,7 +144,7 @@ class ScoreBoard:
             if self.cur_high_score >= self.high_scores[i]:
                 self.high_scores.insert(i, self.score)
                 break
-        if len(self.high_scores) > 10:  # onlu store 10 high scores
+        if len(self.high_scores) > 10:  # only store 10 high scores
             self.high_scores.pop()
         # save high scores
         if self.score > 0:

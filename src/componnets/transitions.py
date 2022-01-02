@@ -68,7 +68,6 @@ class PauseGame(Transition):
         self.callback()
 
     def switch_active_button(self):
-        print('called')
         if self.curr_selection == "resume":
             self.curr_selection = "quit"
             self.resume_btn.set_active(False)

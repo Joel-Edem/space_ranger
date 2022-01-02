@@ -3,6 +3,7 @@ import sys
 from typing import Optional
 
 import pygame
+from pygame.mixer import Sound
 from pygame.sprite import Group
 
 from src.componnets.background_stars import BackgroundStars
@@ -40,14 +41,20 @@ class Game:
         self.aliens: Group = Group()
         self.game_state = GameStatus(self)
         self.score_board = ScoreBoard(self.game_state)
-        self.sound_effects = {}
+        self.sound_effects: dict[str, Sound] = {}
+
         self.load_sounds()
 
     def load_sounds(self):
 
         for n in ["laser", "explosion"]:
             fp = os.path.join(ASSETS, 'sound', f'{n}.wav')
-            self.sound_effects[n] = pygame.mixer.Sound(fp)
+            sound = pygame.mixer.Sound(fp)
+            if n == "explosion":
+                sound.set_volume((Settings.sound_level / 100)/2)
+            else:
+                sound.set_volume(Settings.sound_level/100)
+            self.sound_effects[n] = sound
 
     def create_background(self):
         self.background.create_stars()

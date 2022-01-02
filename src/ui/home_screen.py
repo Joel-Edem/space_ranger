@@ -26,7 +26,7 @@ class HomeScreen:
             "high_scores": {
                 "msg": "High Scores",
                 "height": 50,
-                "cb": None
+                "cb": self.show_high_score_screen
             },
 
             "settings": {
@@ -42,6 +42,11 @@ class HomeScreen:
             }
         }
         self.create_widgets()
+
+    def show_high_score_screen(self):
+        from src.ui.high_score_screen import HighScoreScreen
+
+        self.game_state.current_screen = HighScoreScreen(self.game_state)
 
     def create_widgets(self):
         """
@@ -62,7 +67,7 @@ class HomeScreen:
         for btn in self.widgets.values():
             btn.render(screen)
 
-    def switch_active_button(self, up:bool):
+    def switch_active_button(self, up: bool):
 
         keys = list(self.buttons.keys())
         cur_idx = keys.index(self.current_selection)
@@ -79,7 +84,6 @@ class HomeScreen:
             self.switch_active_button(True)
         elif event.key == pygame.K_RETURN:
             self.widgets[self.current_selection].handle_click()
-
 
     def handle_click(self):
         if pygame.mouse.get_pressed()[0]:
