@@ -121,10 +121,7 @@ class GameStatus:
                 self.transition.handle_event(event)
 
         else:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.current_screen.handle_click()
-            elif event.type == pygame.KEYDOWN:
-                self.current_screen.handle_button_press(event)
+            self.current_screen.handle_event(event)
 
     def update(self):
         """

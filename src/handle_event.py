@@ -12,6 +12,7 @@ def handle_events(game):
                 if not game.game_state.game_running:
                     game.stop()
             elif event.key == pygame.K_SPACE:
+                # todo i should move this to the ship or bullet class maybe
                 if game.game_state.game_running:
                     if not game.game_state.transition:
                         fire_bullet(game)

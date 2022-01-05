@@ -32,7 +32,7 @@ class HomeScreen:
             "settings": {
                 "msg": "Settings",
                 "height": 50,
-                "cb": None
+                "cb": self.show_settings_screen
             },
 
             "exit": {
@@ -47,6 +47,11 @@ class HomeScreen:
         from src.ui.high_score_screen import HighScoreScreen
 
         self.game_state.current_screen = HighScoreScreen(self.game_state)
+
+    def show_settings_screen(self):
+        from src.ui.settings_screen import SettingsScreen
+
+        self.game_state.current_screen = SettingsScreen(self.game_state)
 
     def create_widgets(self):
         """
@@ -93,6 +98,13 @@ class HomeScreen:
                     btn.handle_click()
                     self.current_selection = btn_name
                     break
+
+    def handle_event(self, event):
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.handle_click()
+        elif event.type == pygame.KEYDOWN:
+            self.handle_button_press(event)
 
     def update(self):
         x, y = pygame.mouse.get_pos()

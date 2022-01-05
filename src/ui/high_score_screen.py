@@ -78,6 +78,13 @@ class HighScoreScreen:
         x = Settings.screen_width / 2
         self.back_button = Button("Back", x, y, False, self.close_screen)
 
+    def handle_event(self, event):
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.handle_click()
+        elif event.type == pygame.KEYDOWN:
+            self.handle_button_press(event)
+
     def handle_click(self):
         self.back_button.handle_event()
 

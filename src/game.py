@@ -29,6 +29,7 @@ class Game:
         """
         logger.debug("initializing game")
         pygame.init()
+        Settings.load()
         self.screen = pygame.display.set_mode(
             (Settings.screen_width, Settings.screen_height))
         logger.debug(f"display initialized to  {self.screen.get_size()}")
@@ -50,11 +51,14 @@ class Game:
         for n in ["laser", "explosion"]:
             fp = os.path.join(ASSETS, 'sound', f'{n}.wav')
             sound = pygame.mixer.Sound(fp)
-            if n == "explosion":
-                sound.set_volume((Settings.sound_level / 100)/2)
-            else:
-                sound.set_volume(Settings.sound_level/100)
             self.sound_effects[n] = sound
+            self.set_volume(n)
+
+    def set_volume(self, name, ):
+        if name == "explosion":
+            self.sound_effects[name].set_volume((Settings.sound_level / 500))
+        else:
+            self.sound_effects[name].set_volume(Settings.sound_level / 300)
 
     def create_background(self):
         self.background.create_stars()
@@ -65,12 +69,14 @@ class Game:
         :return:
         """
         logger.debug("starting game loop")
-        # try:
-        while True:
-            handle_events(self)
-            update(self)  # update state
-            render(self)  # render updates
-            self.clock.tick()
+        try:
+            while True:
+                handle_events(self)
+                update(self)  # update state
+                render(self)  # render updates
+                self.clock.tick()
+        except KeyboardInterrupt as e:
+            logger.debug("Stopping ")
 
     def stop(self, ):
         logger.info('closing ---------------------------')

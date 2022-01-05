@@ -1,4 +1,5 @@
 import enum
+import json
 import os.path
 from pathlib import Path
 
@@ -6,7 +7,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ASSETS = os.path.join(BASE_DIR, "assets")
 
 
+
 class Settings:
+    is_initialized = False
+    settings_file = "settings.json"
     screen_width = 800
     screen_height = 700
 
@@ -14,11 +18,34 @@ class Settings:
     color_light = (255, 255, 255)
     show_fps = False
 
-    sound_level = 15
+    sound_level = 50
 
     def __init__(self):
         """Settings for space rangers game"""
-        raise Exception("Do not instantiate")
+        # self.load()
+        # Settings.is_initialized = True
+        # if Settings.is_initialized:
+        raise Exception("Do not re-instantiate")
+
+    @classmethod
+    def save(cls):
+        fp = os.path.join(BASE_DIR, cls.settings_file)
+        with open(fp, "w") as file:
+            try:
+                json.dump(cls.sound_level, file)
+
+            except FileNotFoundError as e:
+                print(f"Could not find file {e.filename}"
+                      )
+
+    @classmethod
+    def load(cls):
+        fp = os.path.join(BASE_DIR, cls.settings_file)
+        try:
+            with open(fp, "rb") as file:
+                cls.sound_level = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Could not find file {cls.settings_file}")
 
 
 class ShipSettings:
