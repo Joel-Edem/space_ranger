@@ -33,6 +33,10 @@ class Game:
         self.screen = pygame.display.set_mode(
             (Settings.screen_width, Settings.screen_height))
         logger.debug(f"display initialized to  {self.screen.get_size()}")
+        Ship.initialize()
+        pygame.display.set_caption("Space Ranger")
+        pygame.display.set_icon(Ship.images[0])
+
         self.clock = pygame.time.Clock()
         self.fps_counter = FpsCounter(self.clock)
         self.background = BackgroundStars

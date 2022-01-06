@@ -173,8 +173,9 @@ class ScoreBoard:
         try:
             with open(fp, 'r') as file:
                 self.high_scores = json.load(file)
-        except FileNotFoundError as e:
+        except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"Could not find file {e.filename}")
+            self.high_scores = []
 
     def save_high_scores(self):
         """

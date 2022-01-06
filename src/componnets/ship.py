@@ -1,3 +1,5 @@
+import os.path
+
 import pygame
 from pygame.sprite import Sprite
 
@@ -13,8 +15,8 @@ class Ship(Sprite):
     }
     images = []
     flames = []
-    sprite_sheet = SpriteSheet("images/space_ranger_sprite_sheet.png")
-    flame_sprite_sheet = SpriteSheet("images/flame_sprite_sheet.png")
+    sprite_sheet = SpriteSheet(os.path.join("images", "space_ranger_sprite_sheet.png"))
+    flame_sprite_sheet = SpriteSheet(os.path.join("images", "flame_sprite_sheet.png"))
     ANIMATION_RATE = .4
     IDLE_RATE = .2
     _initialized = False
