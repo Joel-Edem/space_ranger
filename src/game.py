@@ -78,7 +78,7 @@ class Game:
                 handle_events(self)
                 update(self)  # update state
                 render(self)  # render updates
-                self.clock.tick()
+                self.clock.tick(144)
         except KeyboardInterrupt as e:
             logger.debug("Stopping ")
 

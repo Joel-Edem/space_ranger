@@ -152,7 +152,7 @@ class GameStatus:
         self.current_level = 1
         self.current_screen = HomeScreen(self)
         self.game_running = False
-
+        self.game.score_board.save_scores()
 
 # todo sound
 # todo high score screen

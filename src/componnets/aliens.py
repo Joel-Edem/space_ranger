@@ -3,9 +3,11 @@ import os
 from typing import Callable
 
 import pygame.image
+from pygame import Rect
 from pygame.sprite import Sprite, Group
 
 from src.componnets.bullet import Bullet
+from src.load_assets import SpriteSheet, Location
 from src.settings import ASSETS, Settings, AlienSettings
 
 
@@ -17,6 +19,8 @@ class Position:
 
 class Alien(Sprite):
     sprite_image = None
+    explosion_sprites = []
+    explosion_sprite_sheet = SpriteSheet(os.path.join("images", "explosion_sprite_sheet.png"))
 
     @staticmethod
     def get_max_aliens_x(alien_width):
@@ -57,15 +61,37 @@ class Alien(Sprite):
         if not cls.sprite_image:
             fn = os.path.join(ASSETS, 'images', f"ufo.png")
             cls.sprite_image = pygame.image.load(fn).convert_alpha()
+        if not cls.explosion_sprite_sheet.loaded:
+            cls.explosion_sprite_sheet.load()
+
+            for row in range(6):
+                for col in range(7):
+                    if row == 5 and col > 4:
+                        # print(len(cls.explosion_sprites))
+                        break
+
+                    location = Location(
+                        x=col * 250,
+                        y=row * 250,
+                        width=250,
+                        height=250
+                    )
+                    img = cls.explosion_sprite_sheet.get_image(at=location)
+                    x, y = img.get_size()
+                    new_x = round(x * .25)
+                    new_y = round(y * .25)
+                    cls.explosion_sprites.append(pygame.transform.scale(img, (new_x, new_y)))
 
     def __init__(self):
         super().__init__()
-        if not self.sprite_image:
-            self.load_image()
+        self.load_image()
         self.image = self.sprite_image
         self.rect = self.image.get_rect()
         self.is_dying = False
         self.shrink = 0
+        self.explosion_idx = 0
+        self.explosion_rect: Rect = self.explosion_sprites[0].get_rect()
+        self.explosion_rect.center = self.rect.center
 
     def check_edges(self):
         if self.rect.right >= Settings.screen_width:
@@ -114,13 +140,18 @@ class Alien(Sprite):
         AlienSettings.direction *= -1
 
     def animate(self):
-        self.shrink -= 1
-        x, y = self.image.get_size()
-        new_x = round(x * .95)
-        new_y = round(y * .95)
-        self.image = pygame.transform.scale(self.image, (new_x, new_y))
-        self.rect = self.image.get_rect(center=self.rect.center)
-        if not int(x) or not int(y):
+        next_idx = self.explosion_idx + 1
+        if int(next_idx) < len(self.explosion_sprites):
+            self.explosion_idx = next_idx
+            self.explosion_rect: Rect = self.explosion_sprites[int(self.explosion_idx)].get_rect()
+            self.explosion_rect.center = self.rect.center
+            self.shrink -= 1
+            x, y = self.image.get_size()
+            new_x = round(x * .95)
+            new_y = round(y * .95)
+            self.image = pygame.transform.scale(self.image, (new_x, new_y))
+            self.rect = self.image.get_rect(center=self.rect.center)
+        else:
             self.shrink = 0
 
     def update(self) -> None:
@@ -184,5 +215,7 @@ class Alien(Sprite):
 
     def render(self, screen):
         screen.blit(self.image, self.rect)
+        if self.is_dying:
+            screen.blit(self.explosion_sprites[int(self.explosion_idx)], self.explosion_rect)
 
 # time warp power up

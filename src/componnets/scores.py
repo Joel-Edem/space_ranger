@@ -150,6 +150,10 @@ class ScoreBoard:
         if self.score > 0:
             self.save_high_scores()
 
+    def save_scores(self):
+
+        return self.handle_game_over()
+
     def new_game(self):
         """
         starts a new game
@@ -174,7 +178,6 @@ class ScoreBoard:
             with open(fp, 'r') as file:
                 self.high_scores = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Could not find file {e.filename}")
             self.high_scores = []
 
     def save_high_scores(self):
